@@ -123,6 +123,7 @@ app.post('/api/recipes', (request, response) => {
 
 })
 
-const PORT = 3001;
-app.listen(PORT);
-console.log(`Server running on ${PORT}`)
+const PORT = process.env.PORT || 3001;
+app.listen(PORT, () => {
+  console.log(`Server running on ${PORT}`)
+})
