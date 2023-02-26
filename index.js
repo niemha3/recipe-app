@@ -1,9 +1,11 @@
 // npm run dev to run with nodemon
-// Add comment
 
-const http = require("http");
-const express = require("express");
-const app = express();
+
+const http = require("http")
+const express = require("express")
+const app = express()
+
+app.use(express.json())
 
 let recipes = [
   {
@@ -52,41 +54,73 @@ let recipes = [
   }
 ];
 
-app.get("/", (req, res) => {
-  res.send("<h1> Hello world! </h1>");
-});
+app.get('/', (req, res) => {
+  res.send("<h1> Hello world! </h1>")
+})
 
 /**
  * Get all recipes
  */
-app.get("/api/recipes", (req, res) => {
-  res.json(recipes);
-});
+app.get('/api/recipes', (req, res) => {
+  res.json(recipes)
+})
 
 /**
  * Get recipe by id
  */
-app.get("/api/recipes/:id", (request, response) => {
-  const id = Number(request.params.id);
-  const recipe = recipes.find((recipe) => recipe.id === id);
+app.get('/api/recipes/:id', (request, response) => {
+  const id = Number(request.params.id)
+  const recipe = recipes.find((recipe) => recipe.id === id)
 
   if (recipe) {
-    response.json(recipe);
+    response.json(recipe)
   } else {
-    response.status(404).end();
+    response.status(404).end()
   }
-});
+})
 
 /**
  * Delete recipe
  */
-app.delete("/api/recipes/:id", (request, response) => {
-  const id = Number(request.params.id);
-  recipes = recipes.filter((recipe) => recipe.id !== id);
+app.delete('/api/recipes/:id', (request, response) => {
+  const id = Number(request.params.id)
+  recipes = recipes.filter((recipe) => recipe.id !== id)
 
-  response.status(204).end();
-});
+  response.status(204).end()
+})
+
+const generateId = () => {
+  const maxId = recipes.length > 0
+    ? Math.max(...recipes.map((recipe) => recipe.id)) : 0
+
+  return maxId + 1
+}
+
+/**
+ * Create recipe
+ */
+app.post('/api/recipes', (request, response) => {
+  const body = request.body
+
+  if (!body.name) {
+    return response.status(400).json({
+      error: 'content missing'
+    })
+  }
+
+  const recipe = {
+    name: body.name,
+    mainIngredient: body.mainIngredient,
+    meal: body.meal,
+    id: generateId()
+  }
+
+  recipes = recipes.concat(recipe)
+
+  response.json(recipe)
+
+})
 
 const PORT = 3001;
 app.listen(PORT);
-console.log(`Server running on ${PORT}`);
+console.log(`Server running on ${PORT}`)
