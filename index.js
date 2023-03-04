@@ -1,8 +1,8 @@
 // npm run dev to run with nodemon
 
 
-// const http = require('http')
 require('dotenv').config()
+const http = require('http')
 const express = require('express')
 const app = express()
 const cors = require('cors')
@@ -59,12 +59,13 @@ app.post('/api/recipes', (request, response) => {
     })
   }
 
-  const recipe = {
+  const recipe = new Recipe({
     name: body.name,
     mainIngredient: body.mainIngredient,
+  })
 
 
-  }
+
 
   recipe.save().then(savedRecipe => {
     response.json(savedRecipe)
