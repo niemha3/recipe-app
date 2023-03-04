@@ -1,16 +1,27 @@
-// npm run dev to run with nodemon
-
-
-require('dotenv').config()
-const http = require('http')
 const express = require('express')
 const app = express()
 const cors = require('cors')
+require('dotenv').config()
+
 const Recipe = require('./models/recipe')
 
+const requestLogger = (request, response, next) => {
+  console.log('Method: ', request.method)
+  console.log('Path: ', request.path)
+  console.log('Body: ', request.body)
+  console.log('---')
+  next()
+}
+
+
+
 app.use(cors())
-app.use(express.json())
 app.use(express.static('build'))
+app.use(express.json())
+app.use(requestLogger)
+
+let recipes = []
+
 
 
 
@@ -27,30 +38,71 @@ app.get('/api/recipes', (request, response) => {
   })
 })
 
+const unknownEndpoint = (request, response) => {
+  response.status(404).send({ error: 'unknown endpoint' })
+}
+
+
+
+const errorHandler = (error, request, response, next) => {
+  console.error(error.message)
+
+  if (error.name === 'CastError') {
+    return response.status()
+  } else if (error.name === 'ValidationError') {
+    return response.status(400).json({ error: error.message })
+  }
+  next(error)
+}
+
+
+
 /**
  * Get recipe by id
  */
-app.get('/api/recipes/:id', (request, response) => {
+app.get('/api/recipes/:id', (request, response, next) => {
   Recipe.findById(request.params.id).then(recipe => {
-    response.json(recipe)
+    if (recipe) {
+      response.json(recipe)
+    } else {
+      response.status(404).end()
+    }
   })
+    .catch(error => next(error))
+
+
 })
 
 /**
  * Delete recipe
  */
-app.delete('/api/recipes/:id', (request, response) => {
-  const id = Number(request.params.id)
-  recipes = recipes.filter((recipe) => recipe.id !== id)
+app.delete('/api/recipes/:id', (request, response, next) => {
+  Recipe.findByIdAndRemove(request.params.id)
+    .then(result => {
+      response.status(204).end()
+    })
+    .catch(error => next(error))
 
-  response.status(204).end()
+})
+
+/**
+ * Update existing recipe
+ */
+app.put('/api/recipes/:id', (request, response, next) => {
+  const { name, mainIngredient } = request.body
+
+  Recipe.findByIdAndUpdate(request.params.id, { name, mainIngredient }, { new: true, runValidators: true, context: 'query' })
+    .then(updatedRecipe => {
+      response.json(updatedRecipe)
+    })
+    .catch(error => next(error))
 })
 
 
 /**
  * Create recipe
  */
-app.post('/api/recipes', (request, response) => {
+app.post('/api/recipes', (request, response, next) => {
   const body = request.body
 
   if (body.name === undefined) {
@@ -70,31 +122,17 @@ app.post('/api/recipes', (request, response) => {
   recipe.save().then(savedRecipe => {
     response.json(savedRecipe)
   })
+    .catch(error => next(error))
 
 })
+
+app.use(unknownEndpoint)
+app.use(errorHandler)
 
 const PORT = process.env.PORT
 app.listen(PORT, () => {
   console.log(`Server running on ${PORT}`)
+
+
 })
 
-// const mongoose = require('mongoose')
-
-// if (process.argv.length < 3) {
-//   console.log('give password as argument')
-//   process.exit(1)
-// }
-
-// const password = process.argv[2]
-
-// const url = process.env.MONGODB_URI
-
-// console.log('connecting to', url)
-
-// mongoose.connect(url)
-//   .then(result => {
-//     console.log('connected to MONGODB')
-//   })
-//   .catch((error) => {
-//     console.log('error connecting to MongoDB: ', error.message)
-//   })
