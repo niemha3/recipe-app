@@ -5,6 +5,7 @@ const http = require('http')
 const express = require('express')
 const app = express()
 const cors = require('cors')
+const Recipe = require('./models/recipe')
 
 app.use(cors())
 app.use(express.json())
@@ -64,8 +65,10 @@ app.get('/', (req, res) => {
 /**
  * Get all recipes
  */
-app.get('/api/recipes', (req, res) => {
-  res.json(recipes)
+app.get('/api/recipes', (request, response) => {
+  Recipe.find({}).then(recipes => {
+    response.json(recipes)
+  })
 })
 
 /**
@@ -128,3 +131,24 @@ const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
   console.log(`Server running on ${PORT}`)
 })
+
+// const mongoose = require('mongoose')
+
+// if (process.argv.length < 3) {
+//   console.log('give password as argument')
+//   process.exit(1)
+// }
+
+// const password = process.argv[2]
+
+// const url = process.env.MONGODB_URI
+
+// console.log('connecting to', url)
+
+// mongoose.connect(url)
+//   .then(result => {
+//     console.log('connected to MONGODB')
+//   })
+//   .catch((error) => {
+//     console.log('error connecting to MongoDB: ', error.message)
+//   })
