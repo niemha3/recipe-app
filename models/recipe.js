@@ -15,7 +15,11 @@ mongoose.connect(url)
     })
 
 const recipeSchema = new mongoose.Schema({
-    name: String,
+    name: {
+        type: String,
+        minLength: 4,
+        required: true
+    },
     mainIngredient: String
 })
 

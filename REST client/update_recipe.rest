@@ -1,0 +1,7 @@
+PUT http://localhost:3001/api/recipes/640306c67037f240235ee53b
+Content-Type: application/json
+
+{
+    "name": "Beef pasta",
+    "mainIngredient": "Beef"
+}
