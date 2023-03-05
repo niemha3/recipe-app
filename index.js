@@ -23,11 +23,11 @@ app.use(requestLogger)
 let recipes = []
 
 
-//test
 
-// app.get('/', (req, res) => {
-//   res.send("<h1> Hello world! </h1>")
-// })
+
+app.get('/', (req, res) => {
+  res.send("<h1> Hello world! </h1>")
+})
 
 /**
  * Get all recipes
