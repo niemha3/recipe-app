@@ -1,4 +1,5 @@
 const express = require('express')
+const path = require('path')
 const app = express()
 const cors = require('cors')
 require('dotenv').config()
@@ -18,8 +19,8 @@ const requestLogger = (request, response, next) => {
 app.use(cors())
 app.use(express.json())
 app.use(requestLogger)
-app.use(express.static('build/'))
-// app.use(express.static(path.resolve(__dirname, '../client/build')))
+// app.use(express.static('build'))
+app.use(express.static(path.resolve(__dirname, 'build')))
 
 
 //add comment
