@@ -22,9 +22,9 @@ app.use(express.static('build'))
 
 
 //add comment
-app.get("*", (_, res) => // this solves the issue of individual routes /profile/test not working after deployment
-  res.sendFile(path.resolve("build", "index.html"))
-)
+// app.get("*", (_, res) => // this solves the issue of individual routes /profile/test not working after deployment
+//   res.sendFile(path.resolve("build", "index.html"))
+// )
 
 /**
  * Get all recipes
