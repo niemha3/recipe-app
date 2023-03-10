@@ -19,8 +19,8 @@ const requestLogger = (request, response, next) => {
 app.use(cors())
 app.use(express.json())
 app.use(requestLogger)
-// app.use(express.static('build'))
-app.use(express.static(path.resolve(__dirname, 'build')))
+app.use(express.static('build'))
+// app.use(express.static(path.resolve(__dirname, 'build')))
 
 
 //add comment
