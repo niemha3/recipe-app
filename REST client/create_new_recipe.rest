@@ -2,6 +2,12 @@ POST http://localhost:3001/api/recipes
 Content-Type: application/json
 
 {
-    "name": "This would be the new recipe",
-    "mainIngredient": "beef"
+    "name": "Chicken taco salad",
+    "mainIngredient": "Chicken",
+    "cookingTimeInMinutes": 45,
+    "protein": 30,
+    "carbohydrates": 50,
+    "fat": 15,
+    "ingredients": ["Chicken", "nachos", "salad", "salad dressing of choice", "chickpeas"],
+    "instructions": "Just dooooo it"
 }
