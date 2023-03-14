@@ -20,13 +20,7 @@ app.use(cors())
 app.use(express.json())
 app.use(requestLogger)
 app.use(express.static('build'))
-// app.use(express.static(path.resolve(__dirname, 'build')))
 
-
-//add comment
-// app.get("*", (_, res) => // this solves the issue of individual routes /profile/test not working after deployment
-//   res.sendFile(path.resolve("build", "index.html"))
-// )
 
 /**
  * Get all recipes
@@ -113,6 +107,13 @@ app.post('/api/recipes', (request, response, next) => {
   const recipe = new Recipe({
     name: body.name,
     mainIngredient: body.mainIngredient,
+    cookingTimeInMinutes: body.cookingTime,
+    protein: body.protein,
+    carbohydrates: body.carbohydrates,
+    fat: body.fat,
+    ingredients: body.ingredients,
+    instructions: body.instructions
+
   })
 
 
