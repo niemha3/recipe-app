@@ -8,12 +8,8 @@ const Recipe = require('../models/recipe')
 
 beforeEach(async () => {
     await Recipe.deleteMany({})
-
-    let recipeObject = new Recipe(helper.initialRecipes[0])
-    await recipeObject.save()
-
-    recipeObject = new Recipe(helper.initialRecipes[1])
-    await recipeObject.save()
+    await Recipe.insertMany(helper.initialRecipes)
+    
 })
 
 
