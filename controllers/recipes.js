@@ -5,24 +5,33 @@ const Recipe = require('../models/recipe')
 /**
  * Get all recipes
  */
-recipesRouter.get('/recipes', (request, response) => {
-    Recipe.find({}).then(recipes => {
-      response.json(recipes)
-    })
+recipesRouter.get('/', async (request, response) => {
+  const recipes = await Recipe.find({})
+  response.json(recipes)
+
   })
 
 /**
  * Get recipe by id
  */
-recipesRouter.get('/', (request, response, next) => {
-    Recipe.findById(request.params.id).then(recipe => {
-      if (recipe) {
-        response.json(recipe)
-      } else {
-        response.status(404).end()
-      }
-    })
-      .catch(error => next(error))
+recipesRouter.get('/:id', async (request, response, next) => {
+ 
+  try {
+    const recipe = await Recipe.findById(request.params.id)
+
+    if(recipe) {
+      response.json(recipe)
+
+    } else {
+      response.status(404).end()
+
+    }
+    
+  } catch (exception) {
+
+    next(exception)
+    
+  }
   
   })
 
@@ -30,13 +39,16 @@ recipesRouter.get('/', (request, response, next) => {
 /**
  * Delete recipe
  */
-recipesRouter.delete('/:id', (request, response, next) => {
-    Recipe.findByIdAndRemove(request.params.id)
-      .then(result => {
-        response.status(204).end()
-      })
-      .catch(error => next(error))
-  
+recipesRouter.delete('/:id', async (request, response, next) => {
+
+  try {
+    await Recipe.findByIdAndRemove(request.params.id)
+    response.status(204).end()
+    
+  } catch (exception) {
+    next(exception)
+    
+  }
   })
 
   
@@ -56,14 +68,9 @@ recipesRouter.put('/:id', (request, response, next) => {
 /**
  * Create recipe
  */
-recipesRouter.post('/api/recipes', (request, response, next) => {
+recipesRouter.post('/', async (request, response, next) => {
     const body = request.body
-  
-    if (body.name === undefined) {
-      return response.status(400).json({
-        error: 'content missing'
-      })
-    }
+ 
   
     const recipe = new Recipe({
       name: body.name,
@@ -78,12 +85,17 @@ recipesRouter.post('/api/recipes', (request, response, next) => {
     })
   
   
-  
-  
-    recipe.save().then(savedRecipe => {
-      response.json(savedRecipe)
-    })
-      .catch(error => next(error))
+    try {
+
+      const savedRecipe = await recipe.save()
+      response.status(201).json(savedRecipe)
+
+    } catch (exception) {
+
+      next(exception)
+    }
+    
+
   
   })
 
