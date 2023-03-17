@@ -41,14 +41,9 @@ recipesRouter.get('/:id', async (request, response, next) => {
  */
 recipesRouter.delete('/:id', async (request, response, next) => {
 
-  try {
     await Recipe.findByIdAndRemove(request.params.id)
     response.status(204).end()
     
-  } catch (exception) {
-    next(exception)
-    
-  }
   })
 
   
@@ -56,9 +51,21 @@ recipesRouter.delete('/:id', async (request, response, next) => {
  * Update existing recipe
  */
 recipesRouter.put('/:id', (request, response, next) => {
-    const { name, mainIngredient } = request.body
+    const { 
+      name,
+      mainIngredient,
+      cookingTime, 
+      protein, 
+      carbohydrates, 
+      fat, 
+      ingredients, 
+      instructions 
+    } = request.body
   
-    Recipe.findByIdAndUpdate(request.params.id, { name, mainIngredient }, { new: true, runValidators: true, context: 'query' })
+    Recipe.findByIdAndUpdate(
+      request.params.id,
+      { name, mainIngredient, cookingTime, protein, carbohydrates, fat, ingredients, instructions },
+      { new: true, runValidators: true, context: 'query' })
       .then(updatedRecipe => {
         response.json(updatedRecipe)
       })
