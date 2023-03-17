@@ -82,3 +82,34 @@ it('should not add recipe when name is not filled', async () => {
     expect(recipesAtEnd).toHaveLength(helper.initialRecipes.length)
 
 })
+
+it('should show specific recipe', async() => {
+    const recipesAtStart = await helper.recipesInDb()
+
+    const recipeToShow = recipesAtStart[0]
+
+    const resultRecipe = await api
+    .get(`/api/recipes/${recipeToShow.id}`)
+    .expect(200)
+    .expect('Content-Type', /application\/json/)
+
+    expect(resultRecipe.body).toEqual(recipeToShow)
+})
+
+it('should delete given recipe', async () => {
+    const recipesAtStart = await helper.recipesInDb()
+
+    const recipeToDelete = recipesAtStart[0]
+
+    await api
+    .delete(`/api/recipes/${recipeToDelete.id}`)
+    .expect(204)
+
+    const recipesAtEnd = await helper.recipesInDb()
+
+    expect(recipesAtEnd).toHaveLength(helper.initialRecipes.length - 1)
+
+    const names = recipesAtEnd.map(recipe => recipe.name)
+
+    expect(names).not.toContain(recipeToDelete.name)
+})
