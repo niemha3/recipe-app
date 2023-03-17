@@ -14,9 +14,8 @@ recipesRouter.get('/', async (request, response) => {
 /**
  * Get recipe by id
  */
-recipesRouter.get('/:id', async (request, response, next) => {
+recipesRouter.get('/:id', async (request, response) => {
  
-  try {
     const recipe = await Recipe.findById(request.params.id)
 
     if(recipe) {
@@ -26,20 +25,13 @@ recipesRouter.get('/:id', async (request, response, next) => {
       response.status(404).end()
 
     }
-    
-  } catch (exception) {
-
-    next(exception)
-    
-  }
-  
   })
 
 
 /**
  * Delete recipe
  */
-recipesRouter.delete('/:id', async (request, response, next) => {
+recipesRouter.delete('/:id', async (request, response) => {
 
     await Recipe.findByIdAndRemove(request.params.id)
     response.status(204).end()
@@ -75,7 +67,7 @@ recipesRouter.put('/:id', (request, response, next) => {
 /**
  * Create recipe
  */
-recipesRouter.post('/', async (request, response, next) => {
+recipesRouter.post('/', async (request, response) => {
     const body = request.body
  
   
@@ -91,19 +83,8 @@ recipesRouter.post('/', async (request, response, next) => {
   
     })
   
-  
-    try {
-
       const savedRecipe = await recipe.save()
       response.status(201).json(savedRecipe)
-
-    } catch (exception) {
-
-      next(exception)
-    }
-    
-
-  
   })
 
   module.exports = recipesRouter
