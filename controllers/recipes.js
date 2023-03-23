@@ -5,38 +5,37 @@ const Recipe = require('../models/recipe')
 /**
  * Get all recipes
  */
-recipesRouter.get('/recipes', (request, response) => {
-    Recipe.find({}).then(recipes => {
-      response.json(recipes)
-    })
+recipesRouter.get('/', async (request, response) => {
+  const recipes = await Recipe.find({})
+  response.json(recipes)
+
   })
 
 /**
  * Get recipe by id
  */
-recipesRouter.get('/', (request, response, next) => {
-    Recipe.findById(request.params.id).then(recipe => {
-      if (recipe) {
-        response.json(recipe)
-      } else {
-        response.status(404).end()
-      }
-    })
-      .catch(error => next(error))
-  
+recipesRouter.get('/:id', async (request, response) => {
+ 
+    const recipe = await Recipe.findById(request.params.id)
+
+    if(recipe) {
+      response.json(recipe)
+
+    } else {
+      response.status(404).end()
+
+    }
   })
 
 
 /**
  * Delete recipe
  */
-recipesRouter.delete('/:id', (request, response, next) => {
-    Recipe.findByIdAndRemove(request.params.id)
-      .then(result => {
-        response.status(204).end()
-      })
-      .catch(error => next(error))
-  
+recipesRouter.delete('/:id', async (request, response) => {
+
+    await Recipe.findByIdAndRemove(request.params.id)
+    response.status(204).end()
+    
   })
 
   
@@ -44,9 +43,22 @@ recipesRouter.delete('/:id', (request, response, next) => {
  * Update existing recipe
  */
 recipesRouter.put('/:id', (request, response, next) => {
-    const { name, mainIngredient } = request.body
+    const { 
+      name,
+      mainIngredient,
+      cookingTimeInMinutes, 
+      calories,
+      protein, 
+      carbohydrates, 
+      fat, 
+      ingredients, 
+      instructions 
+    } = request.body
   
-    Recipe.findByIdAndUpdate(request.params.id, { name, mainIngredient }, { new: true, runValidators: true, context: 'query' })
+    Recipe.findByIdAndUpdate(
+      request.params.id,
+      { name, mainIngredient, cookingTimeInMinutes, calories, protein, carbohydrates, fat, ingredients, instructions },
+      { new: true, runValidators: true, context: 'query' })
       .then(updatedRecipe => {
         response.json(updatedRecipe)
       })
@@ -56,19 +68,15 @@ recipesRouter.put('/:id', (request, response, next) => {
 /**
  * Create recipe
  */
-recipesRouter.post('/api/recipes', (request, response, next) => {
+recipesRouter.post('/', async (request, response) => {
     const body = request.body
-  
-    if (body.name === undefined) {
-      return response.status(400).json({
-        error: 'content missing'
-      })
-    }
+ 
   
     const recipe = new Recipe({
       name: body.name,
       mainIngredient: body.mainIngredient,
-      cookingTimeInMinutes: body.cookingTime,
+      cookingTimeInMinutes: body.cookingTimeInMinutes,
+      calories: body.calories,
       protein: body.protein,
       carbohydrates: body.carbohydrates,
       fat: body.fat,
@@ -77,14 +85,8 @@ recipesRouter.post('/api/recipes', (request, response, next) => {
   
     })
   
-  
-  
-  
-    recipe.save().then(savedRecipe => {
-      response.json(savedRecipe)
-    })
-      .catch(error => next(error))
-  
+      const savedRecipe = await recipe.save()
+      response.status(201).json(savedRecipe)
   })
 
   module.exports = recipesRouter

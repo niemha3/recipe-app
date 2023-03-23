@@ -6,19 +6,14 @@ const recipeSchema = new mongoose.Schema({
         minLength: 4,
         required: true
     },
+    calories: Number,
     mainIngredient: String,
-    cookingTime: Number,
+    cookingTimeInMinutes: Number,
     protein: Number,
     carbohydrates: Number,
     fat: Number,
-    ingredients: {
-        type: [String],
-        required: true
-    },
-    instructions: {
-        type: String,
-        required: true
-    }
+    ingredients: [String],
+    instructions: [String]
 })
 
 // Muutetaan mongoosen palauttama _id olio merkkijonoksi
