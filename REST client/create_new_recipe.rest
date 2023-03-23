@@ -2,12 +2,13 @@ POST http://localhost:3001/api/recipes
 Content-Type: application/json
 
 {
-    "name": "Chicken taco salad",
+    "name": "Salmon taco salad",
     "mainIngredient": "Chicken",
     "cookingTimeInMinutes": 45,
+    "calories": 540,
     "protein": 30,
     "carbohydrates": 50,
     "fat": 15,
-    "ingredients": ["Chicken", "nachos", "salad", "salad dressing of choice", "chickpeas"],
-    "instructions": "Just dooooo it"
+    "ingredients": ["100g Chicken", "30g nachos", "salad", "20g salad dressing of choice", "115g chickpeas"],
+    "instructions":["1. Cook the chicken", "2. Add salad, chickpeas and chicken in to a bowl", "3. Crumble the nachos on top", "4. Top with salad dressing"]
 }

@@ -6,8 +6,9 @@ const recipeSchema = new mongoose.Schema({
         minLength: 4,
         required: true
     },
+    calories: Number,
     mainIngredient: String,
-    cookingTime: Number,
+    cookingTimeInMinutes: Number,
     protein: Number,
     carbohydrates: Number,
     fat: Number,
