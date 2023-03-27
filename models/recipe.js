@@ -6,6 +6,8 @@ const recipeSchema = new mongoose.Schema({
         minLength: 4,
         required: true
     },
+    meal: String,
+    imageUrlId: String,
     calories: Number,
     mainIngredient: String,
     cookingTimeInMinutes: Number,

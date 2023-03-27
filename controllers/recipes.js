@@ -45,6 +45,8 @@ recipesRouter.delete('/:id', async (request, response) => {
 recipesRouter.put('/:id', (request, response, next) => {
     const { 
       name,
+      meal,
+      imageUrlId,
       mainIngredient,
       cookingTimeInMinutes, 
       calories,
@@ -57,7 +59,7 @@ recipesRouter.put('/:id', (request, response, next) => {
   
     Recipe.findByIdAndUpdate(
       request.params.id,
-      { name, mainIngredient, cookingTimeInMinutes, calories, protein, carbohydrates, fat, ingredients, instructions },
+      { name, meal, mainIngredient, cookingTimeInMinutes, calories, protein, carbohydrates, fat, ingredients, instructions },
       { new: true, runValidators: true, context: 'query' })
       .then(updatedRecipe => {
         response.json(updatedRecipe)
@@ -74,6 +76,8 @@ recipesRouter.post('/', async (request, response) => {
   
     const recipe = new Recipe({
       name: body.name,
+      meal: body.meal,
+      imageUrlId: body.imageUrlId,
       mainIngredient: body.mainIngredient,
       cookingTimeInMinutes: body.cookingTimeInMinutes,
       calories: body.calories,

@@ -3,8 +3,10 @@ Content-Type: application/json
 
 {
     "name": "Salmon taco salad",
+    "meal": "Lunch",
     "mainIngredient": "Chicken",
     "cookingTimeInMinutes": 45,
+    "imageUrlId": "https://drive.google.com/file/d/1IscrtpwTC5YzdXrAxoGeByngmru51kSl/view?usp=share_link",
     "calories": 540,
     "protein": 30,
     "carbohydrates": 50,
