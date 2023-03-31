@@ -93,7 +93,8 @@ recipesRouter.post('/', async (request, response) => {
       response.status(201).json(savedRecipe)
   })
 
-  recipesRouter.get("*", (_, res) => // this solves the issue of individual routes /profile/test not working after deployment
-  res.sendFile(path.resolve("build", "index.html"))
-);
+  recipesRouter.get('*', function (request, response) {
+    response.sendFile(path.resolve(__dirname, '../build/index.html'))
+  })
+
   module.exports = recipesRouter
