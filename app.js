@@ -25,6 +25,10 @@ app.use(express.static(__dirname + '/build'))
 app.use(express.json())
 app.use(middleware.requestLogger)
 
+app.get('*', function (request, response) {
+    response.sendFile(path.resolve(__dirname, '../build/index.html'))
+  })
+  
 app.use('/api/recipes', recipesRouter)
 
 app.use(middleware.unknownEndpoint)
