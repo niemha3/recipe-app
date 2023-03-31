@@ -95,7 +95,7 @@ recipesRouter.post('/', async (request, response) => {
 
   /* final catch-all route to index.html defined last */
 recipesRouter.get('/*', (req, res) => {
-  res.sendFile(__dirname + '/index.html');
+  res.sendFile(path.join(__dirname, 'build', '/index.html'))
 })
 
   module.exports = recipesRouter
