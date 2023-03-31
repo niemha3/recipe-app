@@ -93,8 +93,5 @@ recipesRouter.post('/', async (request, response) => {
       response.status(201).json(savedRecipe)
   })
 
-  recipesRouter.get('*', function (request, response) {
-    response.sendFile(path.resolve(__dirname, '../build/index.html'))
-  })
 
   module.exports = recipesRouter
