@@ -1,12 +1,18 @@
 const config = require('./utils/config')
 const express = require('express')
 require('express-async-errors')
+
+// Fix 2
+const path = require('path')
 const app = express()
+
 const cors = require('cors')
 const recipesRouter = require('./controllers/recipes')
 const middleware = require('./utils/middleware')
 const logger = require('./utils/logger')
 const mongoose = require('mongoose')
+
+
 
 mongoose.set('strictQuery', false)
 
