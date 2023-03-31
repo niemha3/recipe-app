@@ -1,5 +1,6 @@
 const config = require('./utils/config')
 const express = require('express')
+const path = require('path')
 require('express-async-errors')
 const app = express()
 const cors = require('cors')
@@ -25,11 +26,12 @@ app.use(express.static(__dirname + '/build'))
 app.use(express.json())
 app.use(middleware.requestLogger)
 
-app.get('*', function (request, response) {
-    response.sendFile(path.resolve(__dirname, '../build/index.html'))
-  })
-  
+
 app.use('/api/recipes', recipesRouter)
+
+app.get('/*', function (req, res) {
+    res.sendFile(path.join(__dirname, 'build', 'index.html'));
+  });
 
 app.use(middleware.unknownEndpoint)
 app.use(middleware.errorHandler)
